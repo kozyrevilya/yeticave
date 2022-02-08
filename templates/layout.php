@@ -44,20 +44,6 @@ $lots = [
         'image_url' => 'img/lot-6.jpg'
     ]
 ];
-
-function format_price(float $price = 0): string
-{
-    $formated_price = null;
-    $rounded_price = ceil($price);
-
-    if ($rounded_price < 1000) {
-        $formated_price = $rounded_price;
-    } else {
-        $formated_price = number_format($rounded_price, 0, '', ' ');
-    }
-
-    return $formated_price;
-};
 ?>
 <!DOCTYPE html>
 <html lang="ru">
