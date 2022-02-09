@@ -1,6 +1,8 @@
 <?php
 require_once 'functions.php';
 
+date_default_timezone_set('Europe/Moscow');
+
 $main_content = include_template('templates/index.php', [
     'lots' => [
         [
@@ -43,6 +45,7 @@ $main_content = include_template('templates/index.php', [
 ]);
 
 $layout = include_template('templates/layout.php', [
+    'title' => 'Главная',
     'is_auth' => (bool) rand(0, 1),
     'user_name' => 'Константин',
     'user_avatar' => 'img/user.jpg',
