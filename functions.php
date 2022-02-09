@@ -1,5 +1,5 @@
 <?php
-function include_template(string $path_to_template, array $data): string
+function include_template(string $path_to_template = '', array $data = []): string
 {
     if (!file_exists($path_to_template)) {
         return '';
@@ -25,4 +25,23 @@ function format_price(float $price = 0): string
     }
 
     return $formated_price;
+};
+
+function set_timer(): string
+{
+    $current_timestamp = time();
+    $tomorrow_timestamp = strtotime('tomorrow');
+    $seconds_until_tomorrow = $tomorrow_timestamp - $current_timestamp;
+
+    $hours_until_tomorrow = floor($seconds_until_tomorrow / 3600);
+    if ($hours_until_tomorrow < 10) {
+        $hours_until_tomorrow = '0' .  $hours_until_tomorrow;
+    }
+
+    $minutes_until_tomorrow = floor(($seconds_until_tomorrow % 3600) / 60);
+    if ($minutes_until_tomorrow < 10) {
+        $minutes_until_tomorrow = '0' .  $minutes_until_tomorrow;
+    }
+
+    return $hours_until_tomorrow . ':' . $minutes_until_tomorrow;
 };
