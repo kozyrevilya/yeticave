@@ -4,8 +4,6 @@ require 'functions.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot = $_POST;
 
-    var_dump($lot);
-
     $required = ['lot-name', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 
     $errors = [];
@@ -19,6 +17,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($lot['category'] == 'Выберите категорию') $errors['category'] = 'Заполните это поле';
+
+    if (isset($_FILES['photo']['name'])) {
+        $tmp_name = $_FILES['photo']['tmp_name'];
+        $path = $_FILES['photo']['name'];
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+
+        if ($file_type !== 'image/jpeg') {
+            $errors['photo'] = 'Загрузите изображение в формате JPEG';
+        } else {
+            move_uploaded_file($tmp_name, 'img/' . $path);
+            $lot['path'] = $path;
+        }
+    }
 
     if (count($errors)) {
         $main_content = include_template('templates/add.php', [

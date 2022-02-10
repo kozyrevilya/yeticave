@@ -21,7 +21,7 @@
     </ul>
 </nav>
 <?php $class_name = isset($errors) && count($errors) ? 'form--invalid' : ''; ?>
-<form class="form form--add-lot container <?= $class_name; ?>" action="../add.php" method="post">
+<form class="form form--add-lot container <?= $class_name; ?>" action="../add.php" method="post" enctype="multipart/form-data">
     <h2>Добавление лота</h2>
     <div class="form__container-two">
         <?php
@@ -79,7 +79,16 @@
         <textarea id="message" name="message" placeholder="Напишите описание лота" required><?= $value; ?></textarea>
         <span class="form__error"><?= $error_message; ?></span>
     </div>
-    <div class="form__item form__item--file"> <!-- form__item--uploaded -->
+    <?php
+        $class_name = '';
+        $error_message = '';
+
+        if (isset($errors['photo'])) {
+            $class_name = 'form__item--invalid';
+            $error_message = $errors['photo'];
+        }
+    ?>
+    <div class="form__item form__item--file <?= $class_name; ?>"> <!-- form__item--uploaded -->
         <label>Изображение</label>
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
@@ -92,6 +101,7 @@
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
+            <span class="form__error"><?= $error_message; ?></span>
         </div>
     </div>
     <div class="form__container-three">
