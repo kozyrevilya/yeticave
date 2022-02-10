@@ -4,30 +4,27 @@ require 'functions.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot = $_POST;
 
-    $required = ['lot-name', 'message', 'photo', 'lot-rate', 'lot-step', 'lot-date'];
-    $dict = [
-        'lot-name' => 'Наименование',
-        'category' => 'Категория',
-        'message' => 'Описание',
-        'photo' => 'Изображение',
-        'lot-rate' => 'Начальная цена',
-        'lot-step' => 'Шаг ставки',
-        'lot-date' => 'Дата окончания торгов'
-    ];
+    var_dump($lot);
+
+    $required = ['lot-name', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+
     $errors = [];
 
     foreach ($lot as $key => $value) {
         if (in_array($key, $required)) {
-            if (!$value) {
-                $errors[$dict[$key]] = 'Это поле надо заполнить';
-            }
+            if ($key == 'lot-rate' && !is_numeric($value)) $errors[$key] = 'Введите число';
+            if ($key == 'lot-step' && !is_numeric($value)) $errors[$key] = 'Введите число';
+            if (!$value) $errors[$key] = 'Заполните это поле';
         }
     }
 
-    if ($lot['category'] == 'Выберите категорию') $errors[$dict['category']] = 'Это поле надо заполнить';
+    if ($lot['category'] == 'Выберите категорию') $errors['category'] = 'Заполните это поле';
 
     if (count($errors)) {
-        $main_content = include_template('templates/add.php', ['errors' => $errors]);
+        $main_content = include_template('templates/add.php', [
+            'lot' => $lot,
+            'errors' => $errors
+        ]);
     } else {
         $main_content = 'all works well';
     }
