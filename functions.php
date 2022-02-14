@@ -45,3 +45,24 @@ function set_timer(): string
 
     return $hours_until_tomorrow . ':' . $minutes_until_tomorrow;
 };
+
+function search_user_by_email(string $email, array $data): array
+{
+    foreach ($data as $account) {
+        if ($account['email'] == $email) return $account;
+    }
+
+    return [];
+}
+
+function check_user(): array {
+    $is_auth = false;
+    $user_name = '';
+
+    if (isset($_SESSION['user'])) {
+        $is_auth = true;
+        $user_name = $_SESSION['user']['name'];
+    }
+
+    return ['is_auth' => $is_auth, 'user_name' => $user_name];
+}

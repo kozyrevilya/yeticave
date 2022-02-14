@@ -1,6 +1,13 @@
 <?php
 require 'functions.php';
 
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    http_response_code(403);
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot = $_POST;
 
@@ -46,10 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 
+$user = check_user();
+
 $layout = include_template('templates/layout.php', [
     'title' => 'Добавить лот',
-    'is_auth' => (bool) rand(0, 1),
-    'user_name' => 'Константин',
+    'is_auth' => $user['is_auth'],
+    'user_name' => $user['user_name'],
     'user_avatar' => 'img/user.jpg',
     'categories' => ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'],
     'page_content' => $main_content
