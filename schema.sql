@@ -27,6 +27,7 @@ CREATE TABLE lots (
   price VARCHAR(255),
   image VARCHAR(255),
   description VARCHAR(1000),
+  is_opened TINYINT(1),
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
   FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
