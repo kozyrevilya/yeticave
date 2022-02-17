@@ -1,10 +1,18 @@
 <?php
 require 'functions.php';
-require 'data.php';
+require 'db.php';
 
 session_start();
 
 $lot_id = $_REQUEST['lot_id'];
+
+try {
+    $sql = "SELECT lots.id, lots.name, lots.price, lots.image, lots.description, categories.name AS category FROM lots, categories WHERE lots.category_id = categories.id";
+    $res = $pdo->query($sql);
+    $lots = $res->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $error) {
+    exit($error->getMessage());
+}
 
 $lots_history = [];
 
