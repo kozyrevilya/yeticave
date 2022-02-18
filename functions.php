@@ -46,11 +46,14 @@ function set_timer(): string
     return $hours_until_tomorrow . ':' . $minutes_until_tomorrow;
 };
 
-function search_user_by_email(string $email, array $data): array
+function search_user_by_email(string $email, PDO $pdo): array
 {
-    foreach ($data as $account) {
-        if ($account['email'] == $email) return $account;
-    }
+    $sql = "SELECT email, name, password, avatar FROM users WHERE email = :email";
+    $req = $pdo->prepare($sql);
+    $req->execute(['email' => $email]);
+    $account = $req->fetch(PDO::FETCH_ASSOC);
+
+    if ($account) return $account;
 
     return [];
 }

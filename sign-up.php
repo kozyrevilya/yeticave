@@ -1,6 +1,6 @@
 <?php
-require 'functions.php';
-require 'db.php';
+require_once 'functions.php';
+require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD']  == 'POST') {
     $form = $_POST;
