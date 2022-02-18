@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD']  == 'POST') {
         }
     }
 
-    if (isset($_FILES['avatar']['name'])) {
+    if ($_FILES['avatar']['name']) {
         $tmp_name = $_FILES['avatar']['tmp_name'];
         $path = 'img/' . $_FILES['avatar']['name'];
 
@@ -38,20 +38,37 @@ if ($_SERVER['REQUEST_METHOD']  == 'POST') {
         ]);
     } else {
         try {
-            $sql = "INSERT INTO users VALUES (NULL, :email, :name, :password, :avatar, :contacts, NOW(), NOW())";
+            $sql = "SELECT email FROM users WHERE email = :email";
             $req = $pdo->prepare($sql);
-            $req->execute([
-                'email' => $form['email'],
-                'name' => $form['name'],
-                'password' => password_hash($form['password'], PASSWORD_DEFAULT),
-                'avatar' => $form['avatar_path'],
-                'contacts' => $form['contacts'],
-            ]);
-
-            header('Location: /login.php');
-            exit();
+            $req->execute(['email' => $form['email']]);
+            $account = $req->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             exit($e->getMessage());
+        }
+
+        if (!$account) {
+            try {
+                $sql = "INSERT INTO users VALUES (NULL, :email, :name, :password, :avatar, :contacts, NOW(), NOW())";
+                $req = $pdo->prepare($sql);
+                $req->execute([
+                    'email' => $form['email'],
+                    'name' => $form['name'],
+                    'password' => password_hash($form['password'], PASSWORD_DEFAULT),
+                    'avatar' => $form['avatar_path'],
+                    'contacts' => $form['contacts'],
+                ]);
+
+                header('Location: /login.php');
+                exit();
+            } catch (PDOException $e) {
+                exit($e->getMessage());
+            }
+        } else {
+            $errors['email'] = 'Аккаунт с таким email уже существует';
+            $main_content = include_template('templates/sign-up.php', [
+                'errors' => $errors,
+                'form' => $form
+            ]);
         }
     }
 } else {
@@ -64,7 +81,7 @@ $layout = include_template('templates/layout.php', [
     'title' => 'Вход',
     'is_auth' => $user['is_auth'],
     'user_name' => $user['user_name'],
-    'user_avatar' => 'img/user.jpg',
+    'user_avatar' => $user['avatar'],
     'categories' => ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'],
     'page_content' => $main_content
 ]);

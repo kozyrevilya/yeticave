@@ -65,7 +65,8 @@ function check_user(): array {
     if (isset($_SESSION['user'])) {
         $is_auth = true;
         $user_name = $_SESSION['user']['name'];
+        $user_avatar = $_SESSION['user']['avatar'];
     }
 
-    return ['is_auth' => $is_auth, 'user_name' => $user_name];
+    return ['is_auth' => $is_auth, 'user_name' => $user_name, 'user_avatar' => $user_avatar];
 }

@@ -15,7 +15,7 @@ $layout = include_template('templates/layout.php', [
     'title' => 'История просмотров',
     'is_auth' => $user['is_auth'],
     'user_name' => $user['user_name'],
-    'user_avatar' => 'img/user.jpg',
+    'user_avatar' => $user['user_avatar'],
     'categories' => ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'],
     'page_content' => $main_content
 ]);
