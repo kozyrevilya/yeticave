@@ -32,7 +32,7 @@
             <?php else: ?>
                 <ul class="user-menu__list">
                     <li class="user-menu__item">
-                        <a href="#">Регистрация</a>
+                        <a href="../sign-up.php">Регистрация</a>
                     </li>
                     <li class="user-menu__item">
                         <a href="../login.php">Вход</a>
@@ -44,10 +44,10 @@
 </header>
 
 <?php
-    $class_name = 'class="container"';
-    if ($_SERVER['PHP_SELF'] == '/add.php') $class_name = '';
+    $class_name = '';
+    if ($_SERVER['PHP_SELF'] == '/index.php') $class_name = 'container';
 ?>
-<main <?= $class_name; ?>>
+<main class="<?= $class_name; ?>">
    <?= $page_content; ?>
 </main>
 

@@ -1,5 +1,6 @@
 <?php
-require 'functions.php';
+require_once 'functions.php';
+require_once 'db.php';
 require_once 'userdata.php';
 
 session_start();
@@ -18,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (!count($errors) and $user = search_user_by_email($form['email'], $users)) {
+    if (!count($errors) and $user = search_user_by_email($form['email'], $pdo)) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
@@ -47,7 +48,7 @@ $layout = include_template('templates/layout.php', [
     'title' => 'Вход',
     'is_auth' => $user['is_auth'],
     'user_name' => $user['user_name'],
-    'user_avatar' => 'img/user.jpg',
+    'user_avatar' => $user['user_avatar'],
     'categories' => ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'],
     'page_content' => $main_content
 ]);
